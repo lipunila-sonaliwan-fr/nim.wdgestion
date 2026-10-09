@@ -8,7 +8,7 @@ Les utilisations commerciales ne sont pas couvertes par cette licence.<br/>
 Pour obtenir une autorisation d'utilisation commerciale,<br/>
 contactez l'auteur : metalab (at) sonaliwan.fr.<br/>
 
-# wdGestion V/FR — serveur web à interpréteur Lexis+ sur DuckDB
+# wdGestion V/FR 
 
 Le serveur web **wdGestion V** écrit en Nim exécute **Lexis+**, un langage orienté données et applications **aux instructions françaises**.
 Les données sont stockées dans des **tables SQL DuckDB** (via la bibliothèque `sonaliwan/duckdb` de [duQuack](https://github.com/lipunila-sonaliwan-fr/nim.duckdb)),
