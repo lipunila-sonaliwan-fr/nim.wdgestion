@@ -1,0 +1,22 @@
+{
+  "adresses": [
+    "127.0.0.1"
+  ],
+  "port": 8080,
+  "statique": "BLOB",
+  "base": "wdgestionv.duckdb",
+  "expiration_minutes": 30,
+  "taille_max_corps": 16777216,
+  "instructions_max": 5000000,
+  "cookie_securise": false,
+  "details_erreurs": false,
+  "connexion_essais_max": 10,
+  "connexion_blocage_minutes": 15,
+  "sessions_anonymes_par_ip": 20,
+  "sessions_max": 10000,
+  "acces_fichiers_sql": false,
+  "proxies_de_confiance": [],
+  "fils": 16,
+  "duree_max_secondes": 30,
+  "connexions_par_ip": 64
+}

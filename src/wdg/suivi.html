@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>wdGestion V · Suivi</title>
+<style>
+:root{
+  --fond:#15171c; --panneau:#1c1f26; --panneau2:#232731; --bord:#2e3340; --texte:#d7dae0;
+  --doux:#8a91a0; --accent:#e0a84f; --accent2:#6cb0ff; --ok:#7cc48a; --err:#ff7b72; --sel:#2b3242;
+  --mono: ui-monospace,"JetBrains Mono","Cascadia Code","SF Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--fond);color:var(--texte);font:14px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select{font:inherit;color:inherit}
+button{background:var(--panneau2);border:1px solid var(--bord);border-radius:6px;padding:.3rem .7rem;cursor:pointer}
+button:hover{border-color:var(--accent);color:#fff}
+button.danger{border-color:#5a2b2b;color:#ffb3ad}
+button.danger:hover{border-color:var(--err);color:#fff}
+input{background:var(--fond);border:1px solid var(--bord);border-radius:6px;padding:.3rem .5rem;width:5.5rem}
+header{display:flex;align-items:center;gap:1rem;padding:.6rem 1.2rem;background:var(--panneau);border-bottom:1px solid var(--bord);position:sticky;top:0;z-index:2}
+.logo{font-family:var(--mono);font-weight:700;color:var(--accent)}
+.logo span{color:var(--doux);font-weight:400}
+nav{display:flex;gap:.2rem;flex:1}
+nav button{border-color:transparent;background:none;color:var(--doux)}
+nav button.actif{color:var(--texte);border-color:var(--bord);background:var(--panneau2)}
+.maj{font-family:var(--mono);color:var(--doux);font-size:.85rem;display:flex;align-items:center;gap:.5rem}
+main{padding:1.2rem;max-width:1400px;margin:0 auto}
+.onglet{display:none}
+.onglet.actif{display:block}
+.cartes{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.8rem;margin-bottom:1.2rem}
+.carte{background:var(--panneau);border:1px solid var(--bord);border-radius:10px;padding:.8rem 1rem}
+.carte .t{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--doux)}
+.carte .v{font:600 1.45rem/1.3 var(--mono);margin:.15rem 0}
+.carte .s{color:var(--doux);font-size:.82rem;font-family:var(--mono)}
+.carte svg{display:block;width:100%;height:34px;margin-top:.3rem}
+.carte svg path{fill:none;stroke:var(--accent2);stroke-width:1.5}
+.carte svg path.aire{fill:rgba(108,176,255,.12);stroke:none}
+.barre{display:flex;flex-wrap:wrap;gap:.6rem 1.4rem;align-items:center;background:var(--panneau);border:1px solid var(--bord);border-radius:10px;padding:.7rem 1rem;margin-bottom:1rem}
+.barre label{display:flex;align-items:center;gap:.4rem;color:var(--doux)}
+.barre .sep{flex:1}
+h2{font-size:1rem;margin:1.4rem 0 .6rem;color:var(--texte)}
+h2 small{color:var(--doux);font-weight:400;margin-left:.4rem}
+.tableau{overflow:auto;border:1px solid var(--bord);border-radius:10px;background:var(--panneau)}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+th{position:sticky;top:0;background:var(--panneau2);text-align:left;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--doux);padding:.5rem .6rem;cursor:pointer;white-space:nowrap;user-select:none}
+th.tri::after{content:" ▾";color:var(--accent)}
+th.tri.inv::after{content:" ▴"}
+td{padding:.4rem .6rem;border-top:1px solid var(--bord);vertical-align:top}
+td.n{text-align:right;font-family:var(--mono);white-space:nowrap}
+td.m{font-family:var(--mono);font-size:.82rem;word-break:break-word}
+tr:hover td{background:#1f232b}
+.etat{display:inline-block;padding:0 .45rem;border-radius:999px;font-size:.76rem;border:1px solid var(--bord);white-space:nowrap}
+.etat.anon{color:var(--doux)}
+.etat.co{color:var(--ok);border-color:#2f5a38}
+.etat.run{color:#111;background:var(--accent);border-color:var(--accent)}
+.moi{color:var(--accent);font-size:.75rem;margin-left:.3rem}
+.vide{color:var(--doux);padding:1rem}
+.filtre{width:16rem}
+#detail{position:fixed;inset:0;background:#0009;display:none;z-index:5}
+#detail.ouvert{display:grid;place-items:center}
+#detail .boite{background:var(--panneau);border:1px solid var(--bord);border-radius:12px;width:min(900px,94vw);max-height:86vh;display:flex;flex-direction:column}
+#detail .tete{display:flex;align-items:center;gap:.6rem;padding:.7rem 1rem;border-bottom:1px solid var(--bord)}
+#detail .tete b{flex:1;font-family:var(--mono)}
+#detail .corps{overflow:auto;padding:.8rem 1rem;font-family:var(--mono);font-size:.85rem}
+.arbre ul{list-style:none;margin:0;padding-left:1.1rem;border-left:1px dashed var(--bord)}
+.arbre li{margin:.1rem 0}
+.arbre .k{color:#e8c37e}
+.arbre .ch{color:#a5d6a7}
+.arbre .nb{color:#f2a17a}
+.arbre .at{color:#d59fff}
+.arbre .pr{color:#ff9bb7}
+.arbre .tb{color:var(--accent2);cursor:pointer}
+.arbre .fe>ul{display:none}
+.arbre .doux{color:var(--doux)}
+#toast{position:fixed;bottom:1rem;right:1rem;background:var(--panneau2);border:1px solid var(--bord);border-radius:8px;padding:.6rem .9rem;display:none;z-index:9}
+@media(max-width:700px){header{flex-wrap:wrap}nav{order:3;flex-basis:100%;overflow-x:auto}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">wdGestion&nbsp;V<span>/FR · suivi</span></div>
+  <nav>
+    <button data-o="charge" class="actif">Charge</button>
+    <button data-o="sessions">Sessions</button>
+    <button data-o="procs">Procédures</button>
+    <button data-o="sql">Requêtes SQL</button>
+    <button data-o="statiques">Fichiers statiques</button>
+  </nav>
+  <div class="maj"><label><input type="checkbox" id="auto" checked style="width:auto"> auto (5 s)</label>
+    <button id="rafraichir">⟳</button><span id="heure"></span></div>
+</header>
+<main>
+  <section class="onglet actif" id="o-charge">
+    <div class="cartes" id="cartes"></div>
+    <div class="barre">
+      <span>Mesures depuis <b id="depuis"></b></span><span class="sep"></span>
+      <button class="danger" id="raz">Remettre les mesures à zéro</button>
+    </div>
+  </section>
+
+  <section class="onglet" id="o-sessions">
+    <div class="barre">
+      <label>Durée maximale d'inactivité <input type="number" id="expiration" min="1" step="1"> min</label>
+      <button id="btExpiration">Appliquer</button>
+      <span class="sep"></span>
+      <label>Fermer les sessions inactives depuis plus de <input type="number" id="inactives" min="0" value="10"> min</label>
+      <button class="danger" id="btInactives">Fermer</button>
+    </div>
+    <div class="tableau"><table id="tSessions"></table></div>
+  </section>
+
+  <section class="onglet" id="o-procs">
+    <div class="barre"><label>Filtrer <input class="filtre" id="fProcs" placeholder="nom de procédure"></label>
+      <span class="sep"></span><span class="doux" style="color:var(--doux)">Procédures appelées par le navigateur, /EDIT et /SUIVI</span></div>
+    <h2>Par procédure <small>durées en secondes</small></h2>
+    <div class="tableau"><table id="tProcs"></table></div>
+    <h2>Les 100 exécutions les plus lentes</h2>
+    <div class="tableau"><table id="tTopProcs"></table></div>
+  </section>
+
+  <section class="onglet" id="o-sql">
+    <div class="barre" id="resumeSql"></div>
+    <h2>Les 100 requêtes les plus longues</h2>
+    <div class="tableau"><table id="tTopSql"></table></div>
+  </section>
+
+  <section class="onglet" id="o-statiques">
+    <div class="barre"><label>Filtrer <input class="filtre" id="fStat" placeholder="chemin"></label></div>
+    <div class="tableau"><table id="tStat"></table></div>
+  </section>
+</main>
+
+<div id="detail"><div class="boite">
+  <div class="tete"><b id="dTitre"></b><button id="dRecharger">⟳</button><button id="dFermer">Fermer</button></div>
+  <div class="corps" id="dCorps"></div>
+</div></div>
+<div id="toast"></div>
+
+<script>
+// # CC BY-NC-SA 4.0 - jean-marc "jihem" quere 2026
+"use strict";
+const $ = s => document.querySelector(s);
+const histo = { cpu: [], req: [], mem: [] };
+let precedent = null, dernierEtat = null, dernieresMesures = null, sessionDetail = null;
+const tris = {};
+
+// outils
+async function api(action, params = {}, post = false) {
+  const r = await fetch("/SUIVI/" + action + "?" + new URLSearchParams(params),
+    { method: post ? "POST" : "GET", headers: { "X-WDG": "1" }, body: post ? "" : undefined, credentials: "same-origin" });
+  let j = null;
+  try { j = await r.json(); } catch (e) { }
+  if (!r.ok) throw new Error((j && j.message) || ("HTTP " + r.status + (r.status === 403 ? " : session expirée ou droit SUIVI absent" : "")));
+  return j;
+}
+function toast(m, err) { const t = $("#toast"); t.textContent = m; t.style.display = "block"; t.style.color = err ? "var(--err)" : "var(--texte)"; clearTimeout(toast.h); toast.h = setTimeout(() => t.style.display = "none", 3500); }
+function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]); }
+function duree(s) {
+  if (s == null || s < 0) return "—";
+  if (s < 1e-3) return (s * 1e6).toFixed(0) + " µs";
+  if (s < 1) return (s * 1e3).toFixed(s < 0.01 ? 2 : 1) + " ms";
+  if (s < 60) return s.toFixed(2) + " s";
+  if (s < 3600) return Math.floor(s / 60) + " min " + Math.floor(s % 60) + " s";
+  if (s < 86400) return Math.floor(s / 3600) + " h " + Math.floor(s % 3600 / 60) + " min";
+  return Math.floor(s / 86400) + " j " + Math.floor(s % 86400 / 3600) + " h";
+}
+function octets(n) {
+  if (n == null || n < 0) return "n/d";
+  const u = ["o", "Ko", "Mo", "Go", "To"]; let i = 0;
+  while (n >= 1024 && i < u.length - 1) { n /= 1024; i++; }
+  return (i ? n.toFixed(1) : Math.round(n)) + " " + u[i];
+}
+function date(t) { return new Date(t * 1000).toLocaleString("fr-FR"); }
+function heure(t) { return new Date(t * 1000).toLocaleTimeString("fr-FR"); }
+function ligne(v, cls) { return `<td class="${cls || ""}">${v}</td>`; }
+function spark(serie) {
+  if (serie.length < 2) return "<svg></svg>";
+  const max = Math.max(...serie, 1e-9), w = 200, h = 34, pas = w / (serie.length - 1);
+  const pts = serie.map((v, i) => [i * pas, h - 2 - (v / max) * (h - 4)]);
+  const d = "M" + pts.map(p => p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" L");
+  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><path class="aire" d="${d} L${w} ${h} L0 ${h}Z"/><path d="${d}"/></svg>`;
+}
+function pousser(serie, v) { serie.push(v); if (serie.length > 60) serie.shift(); }
+
+// tableau triable : colonnes = [titre, clef, rendu, classe]
+function tableau(id, colonnes, lignes, triDefaut) {
+  const t = $("#" + id);
+  const tri = tris[id] || (tris[id] = { clef: triDefaut, inv: false });
+  const l = lignes.slice().sort((a, b) => {
+    const x = a[tri.clef], y = b[tri.clef];
+    const r = (typeof x === "number" && typeof y === "number") ? y - x : String(x).localeCompare(String(y), "fr");
+    return tri.inv ? -r : r;
+  });
+  let h = "<thead><tr>" + colonnes.map(c => `<th data-c="${c[1]}" class="${c[1] === tri.clef ? "tri" + (tri.inv ? " inv" : "") : ""}">${c[0]}</th>`).join("") + "</tr></thead><tbody>";
+  if (!l.length) h += `<tr><td colspan="${colonnes.length}" class="vide">Aucune donnée.</td></tr>`;
+  for (const x of l) h += "<tr>" + colonnes.map(c => ligne(c[2] ? c[2](x) : esc(x[c[1]]), c[3])).join("") + "</tr>";
+  t.innerHTML = h + "</tbody>";
+  t.querySelectorAll("th").forEach(th => th.onclick = () => {
+    const c = th.dataset.c; if (!c) return;
+    if (tri.clef === c) tri.inv = !tri.inv; else { tri.clef = c; tri.inv = false; }
+    tableau(id, colonnes, lignes, triDefaut);
+  });
+  return t;
+}
+
+// charge
+function dessinerCharge(e) {
+  const cpu = (e.cpuUtilisateur >= 0) ? e.cpuUtilisateur + e.cpuSysteme : -1;
+  let pctCpu = null, reqS = null, debitIn = null, debitOut = null, sqlPct = null;
+  if (precedent) {
+    const dt = e.maintenant - precedent.maintenant;
+    if (dt > 0) {
+      if (cpu >= 0) pctCpu = Math.max(0, (cpu - (precedent.cpuUtilisateur + precedent.cpuSysteme)) / dt * 100);
+      reqS = Math.max(0, (e.requetes - precedent.requetes) / dt);
+      debitIn = Math.max(0, (e.octetsRecus - precedent.octetsRecus) / dt);
+      debitOut = Math.max(0, (e.octetsEnvoyes - precedent.octetsEnvoyes) / dt);
+      sqlPct = Math.max(0, (e.tempsSql - precedent.tempsSql) / dt * 100);
+    }
+  }
+  if (pctCpu != null) pousser(histo.cpu, pctCpu);
+  if (reqS != null) pousser(histo.req, reqS);
+  if (e.memoire > 0) pousser(histo.mem, e.memoire);
+  const c = (t, v, s, sp) => `<div class="carte"><div class="t">${t}</div><div class="v">${v}</div><div class="s">${s}</div>${sp || ""}</div>`;
+  $("#cartes").innerHTML = [
+    c("Processeur", pctCpu == null ? "…" : pctCpu.toFixed(1) + " %", cpu >= 0 ? `cumul ${duree(e.cpuUtilisateur)} util. · ${duree(e.cpuSysteme)} sys.` : "n/d sur ce système", spark(histo.cpu)),
+    c("Base de données", duree(e.tempsSql), `${e.nbSql} requêtes · ${e.erreursSql} erreur(s)` + (sqlPct != null ? ` · ${sqlPct.toFixed(1)} % du temps` : "")),
+    c("Mémoire", octets(e.memoire), `${e.tablesVivantes} tables vivantes`, spark(histo.mem)),
+    c("Trafic réseau", "↓ " + octets(e.octetsRecus), "↑ " + octets(e.octetsEnvoyes) + (debitIn != null ? ` · ${octets(debitIn)}/s ↓ ${octets(debitOut)}/s ↑` : "")),
+    c("Requêtes", String(e.requetes), reqS == null ? "…" : reqS.toFixed(1) + " req/s", spark(histo.req)),
+    c("Fils d'exécution", `${e.filsOccupes} / ${e.fils}`, `${e.connexions} connexion(s) · ${e.enFile} en file`),
+    c("Sessions", String(e.sessions), `${e.sessions - e.sessionsAnonymes} connectée(s) · ${e.sessionsAnonymes} anonyme(s)`),
+    c("Serveur", duree(e.maintenant - e.demarrage), `${e.procedures} procédures · base ${octets(e.tailleBase)} · max ${e.dureeMax ? e.dureeMax + " s" : "∞"}/requête`)
+  ].join("");
+  $("#depuis").textContent = date(e.debutMesures);
+  precedent = e;
+}
+
+// sessions
+function dessinerSessions(e) {
+  if (document.activeElement !== $("#expiration")) $("#expiration").value = Math.round(e.expiration);
+  const t = tableau("tSessions", [
+    ["Utilisateur", "utilisateur", x => (x.utilisateur ? esc(x.utilisateur) : '<span style="color:var(--doux)">—</span>') + (x.moi ? '<span class="moi">(vous)</span>' : "")],
+    ["IP", "ip", x => `<span class="m">${esc(x.ip)}</span>`],
+    ["État", "etatTri", x => x.occupee ? `<span class="etat run">${esc(x.procedure || "…")} · ${duree(x.depuis)}</span>` : (x.anonyme ? '<span class="etat anon">anonyme</span>' : `<span class="etat co">${esc(x.valide)}</span>`)],
+    ["Ouverte depuis", "duree", x => duree(x.duree), "n"],
+    ["Inactive depuis", "inactivite", x => x.occupee ? "en cours" : duree(x.inactivite), "n"],
+    ["Requêtes", "requetes", null, "n"],
+    ["Tables", "tables", x => x.tables < 0 ? "…" : x.tables, "n"],
+    ["", "pub", x => `<button data-voir="${x.pub}">Voir</button> <button class="danger" data-fermer="${x.pub}" data-moi="${x.moi}">Fermer</button>`]
+  ], e.listeSessions.map(x => Object.assign({ etatTri: x.occupee ? 2 : x.anonyme ? 0 : 1 }, x)), "inactivite");
+  t.querySelectorAll("[data-voir]").forEach(b => b.onclick = () => voirSession(b.dataset.voir));
+  t.querySelectorAll("[data-fermer]").forEach(b => b.onclick = async () => {
+    if (b.dataset.moi === "true" && !confirm("Fermer votre propre session ? Vous serez déconnecté.")) return;
+    try { await api("fermer", { pub: b.dataset.fermer }, true); toast("Session fermée"); rafraichir(); }
+    catch (err) { toast(err.message, true); }
+  });
+}
+async function voirSession(pub) {
+  sessionDetail = pub;
+  $("#dTitre").textContent = "Session " + pub;
+  $("#dCorps").innerHTML = "Chargement…";
+  $("#detail").classList.add("ouvert");
+  try {
+    const j = await api("session", { pub });
+    if (j.erreur) { $("#dCorps").innerHTML = `<p>${esc(j.erreur)}</p>`; return; }
+    let h = `<p class="doux" style="color:var(--doux)">${j.tables} table(s) appartenant à la session · cliquez sur une table pour la replier</p>`;
+    h += '<div class="arbre"><ul>' + noeud("SESSION", j.session) + "</ul></div>";
+    if (j.zones.length) {
+      h += "<h2>Zones de travail</h2><div class='tableau'><table><thead><tr><th>Alias</th><th>Table</th><th>Enr.</th><th>Ordre</th><th>Filtre</th></tr></thead><tbody>";
+      for (const z of j.zones) h += `<tr><td>${esc(z.alias)}${z.courante ? " ★" : ""}</td><td>${esc(z.table)}</td><td class="n">${z.position} / ${z.enregistrements}</td><td class="m">${esc(z.ordre)}</td><td class="m">${esc(z.filtre)}</td></tr>`;
+      h += "</tbody></table></div>";
+    }
+    $("#dCorps").innerHTML = h;
+    $("#dCorps").querySelectorAll(".tb").forEach(x => x.onclick = () => x.parentElement.classList.toggle("fe"));
+  } catch (err) { $("#dCorps").textContent = err.message; }
+}
+function valeur(v) {
+  switch (v.t) {
+    case "nul": return '<span class="at">nul</span>';
+    case "logique": return `<span class="at">${v.v ? "vrai" : "faux"}</span>`;
+    case "nombre": return `<span class="nb">${v.v}</span>`;
+    case "chaine": return `<span class="ch">"${esc(v.v)}"</span>` + (v.n > 2000 ? ` <span class="doux">(${v.n} caractères)</span>` : "");
+    case "procedure": return `<span class="pr">@${esc(v.v)}</span>`;
+    case "ref": return `<span class="tb">↻ table #${v.id}</span> <span class="doux">(déjà affichée : cycle)</span>`;
+    default: return "";
+  }
+}
+function cle(k) { return k.t === "chaine" ? `<span class="k">${esc(k.v)}</span>` : "[" + valeur(k) + "]"; }
+function noeud(etiquette, v) {
+  if (v.t !== "table") return `<li>${etiquette} = ${valeur(v)}</li>`;
+  let h = `<li><span class="tb">${etiquette} : table #${v.id}</span> <span class="doux">(${v.n} élément(s)${v.tronque ? ", tronquée" : ""})</span><ul>`;
+  for (const [k, x] of (v.elements || [])) h += noeud(cle(k), x);
+  if (v.meta) h += noeud('<span class="pr">métatable</span>', v.meta);
+  return h + "</ul></li>";
+}
+$("#dFermer").onclick = () => { $("#detail").classList.remove("ouvert"); sessionDetail = null; };
+$("#dRecharger").onclick = () => sessionDetail && voirSession(sessionDetail);
+$("#detail").onclick = ev => { if (ev.target.id === "detail") $("#dFermer").click(); };
+$("#btExpiration").onclick = async () => {
+  const m = parseFloat($("#expiration").value);
+  try { const j = await api("expiration", { minutes: m }, true); toast(j.avertissement || `Durée maximale d'inactivité : ${m} min (enregistrée)`); rafraichir(); }
+  catch (err) { toast(err.message, true); }
+};
+$("#btInactives").onclick = async () => {
+  const m = parseFloat($("#inactives").value);
+  if (!(m >= 0)) return toast("Nombre de minutes invalide", true);
+  if (!confirm(`Fermer toutes les sessions inactives depuis plus de ${m} min (sauf la vôtre) ?`)) return;
+  try { const j = await api("fermerinactives", { minutes: m }, true); toast(j.fermees + " session(s) fermée(s)"); rafraichir(); }
+  catch (err) { toast(err.message, true); }
+};
+
+// mesures
+function dessinerMesures(m, e) {
+  const f = $("#fProcs").value.toLowerCase();
+  tableau("tProcs", [
+    ["Procédure", "nom", x => `<span class="m">${esc(x.nom)}</span>`],
+    ["Appels", "nombre", null, "n"],
+    ["Min", "min", x => duree(x.min), "n"], ["Max", "max", x => duree(x.max), "n"],
+    ["Moyenne", "moyenne", x => duree(x.moyenne), "n"], ["Total", "total", x => duree(x.total), "n"]
+  ], m.procedures.filter(x => x.nom.toLowerCase().includes(f)), "total");
+  tableau("tTopProcs", [
+    ["Durée", "duree", x => duree(x.duree), "n"], ["Date", "date", x => date(x.date), "n"],
+    ["Procédure", "nom", x => `<span class="m">${esc(x.nom)}</span>`], ["Utilisateur · IP · statut", "detail", x => `<span class="m">${esc(x.detail)}</span>`]
+  ], m.topProcedures.filter(x => x.nom.toLowerCase().includes(f)), "duree");
+  $("#resumeSql").innerHTML = `<span>Temps total en base : <b>${duree(e.tempsSql)}</b></span><span>${e.nbSql} requêtes</span><span>moyenne <b>${duree(e.nbSql ? e.tempsSql / e.nbSql : 0)}</b></span><span>${e.erreursSql} erreur(s)</span>`;
+  tableau("tTopSql", [
+    ["Durée", "duree", x => duree(x.duree), "n"], ["Date", "date", x => date(x.date), "n"],
+    ["Requête", "nom", x => `<span class="m">${esc(x.nom)}</span>`], ["Appelant", "detail", x => `<span class="m">${esc(x.detail || "—")}</span>`]
+  ], m.topSql, "duree");
+  const fs = $("#fStat").value.toLowerCase();
+  tableau("tStat", [
+    ["Fichier", "nom", x => `<span class="m">${esc(x.nom)}</span>`], ["Envois", "nombre", null, "n"],
+    ["Min", "min", x => duree(x.min), "n"], ["Max", "max", x => duree(x.max), "n"],
+    ["Moyenne", "moyenne", x => duree(x.moyenne), "n"], ["Volume", "octets", x => octets(x.octets), "n"]
+  ], m.statiques.filter(x => x.nom.toLowerCase().includes(fs)), "nombre");
+}
+$("#fProcs").oninput = () => dernieresMesures && dessinerMesures(dernieresMesures, dernierEtat);
+$("#fStat").oninput = () => dernieresMesures && dessinerMesures(dernieresMesures, dernierEtat);
+$("#raz").onclick = async () => {
+  if (!confirm("Remettre à zéro toutes les mesures (durées, tops, trafic) ?")) return;
+  try { await api("raz", {}, true); histo.cpu = []; histo.req = []; precedent = null; toast("Mesures remises à zéro"); rafraichir(); }
+  catch (err) { toast(err.message, true); }
+};
+
+// boucle
+async function rafraichir() {
+  try {
+    const [e, m] = await Promise.all([api("etat"), api("mesures")]);
+    dernierEtat = e; dernieresMesures = m;
+    dessinerCharge(e); dessinerSessions(e); dessinerMesures(m, e);
+    $("#heure").textContent = heure(e.maintenant);
+  } catch (err) { toast(err.message, true); }
+}
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("actif", x === b));
+  document.querySelectorAll(".onglet").forEach(o => o.classList.toggle("actif", o.id === "o-" + b.dataset.o));
+});
+$("#rafraichir").onclick = rafraichir;
+setInterval(() => { if ($("#auto").checked && !document.hidden) rafraichir(); }, 5000);
+rafraichir();
+</script>
+</body>
+</html>

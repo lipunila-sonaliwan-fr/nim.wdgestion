@@ -1,0 +1,13 @@
+<% inclure entete avec titre = titre %>
+<section class="carte etroite">
+  <h1>Changer de mot de passe</h1>
+  <% si force %><p class="aide">Votre mot de passe est provisoire : choisissez-en un nouveau pour continuer.</p><% finsi %>
+  <% si non vide(message) %><p class="alerte"><%= message %></p><% finsi %>
+  <form method="post" action="/MOTDEPASSE">
+    <label>Mot de passe actuel <input name="ancien" type="password" autocomplete="current-password" required autofocus></label>
+    <label>Nouveau (12 caractères minimum) <input name="nouveau" type="password" autocomplete="new-password" minlength="12" required></label>
+    <label>Confirmation <input name="confirmation" type="password" autocomplete="new-password" minlength="12" required></label>
+    <button>Valider</button>
+  </form>
+</section>
+<% inclure pied %>

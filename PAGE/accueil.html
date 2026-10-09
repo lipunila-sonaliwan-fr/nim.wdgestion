@@ -1,0 +1,37 @@
+<% inclure entete avec titre = titre %>
+<%-- La zone de travail « produits » a été ouverte par ACCUEIL (utiliser) :
+     ses champs sont lisibles directement (libelle, prix, stock...). --%>
+<div class="grille">
+<section class="carte">
+  <h1>Catalogue <small><%= nbenr() %> produits</small></h1>
+  <table>
+    <thead><tr><th>Article</th><th class="n">Prix</th><th class="n">Stock</th><th></th></tr></thead>
+    <tbody>
+    <% parcourir %>
+      <tr<% si stock < 5 %> class="rare"<% finsi %>>
+        <td><%= libelle %></td>
+        <td class="n"><%= chaine(prix, 1, 2) %> €</td>
+        <td class="n"><%= stock %></td>
+        <td><form method="post" action="/CADDIE"><input type="hidden" name="plus" value="<%= id %>"><button>Ajouter</button></form></td>
+      </tr>
+    <% finparcourir %>
+    </tbody>
+  </table>
+</section>
+<aside class="carte">
+  <% locale c = SESSION.CADDIE %>
+  <h2>Caddie</h2>
+  <% si #c = 0 %>
+    <p class="aide">Vide pour l'instant.</p>
+  <% sinon %>
+    <ul class="caddie">
+    <% pour chaque l dans c.lignes %>
+      <li><span><%= l.QTE %> × <%= l.LIBELLE %></span>
+          <form method="post" action="/CADDIE"><input type="hidden" name="moins" value="<%= l.ID %>"><button class="moins" title="Retirer un">−</button></form></li>
+    <% suivant %>
+    </ul>
+    <p class="total"><%= c %></p>
+  <% finsi %>
+</aside>
+</div>
+<% inclure pied %>

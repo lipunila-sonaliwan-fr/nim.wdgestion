@@ -1,0 +1,20 @@
+<% inclure entete avec titre = titre %>
+<section class="carte">
+  <h1><%= titre %></h1>
+  <p class="aide">Toute requête vers une procédure absente de SESSION.ACCEPTE renvoie 403,
+     supprime la session et incrémente le compteur de l'adresse IP.</p>
+  <% si #liste = 0 %>
+    <p>Aucun incident.</p>
+  <% sinon %>
+  <table>
+    <thead><tr><th>IP</th><th>Premier</th><th>Dernier</th><th class="n">Nombre</th></tr></thead>
+    <tbody>
+    <% pour chaque i dans liste %>
+      <tr><td><code><%= i.IP %></code></td><td><%= gauche(i.PREMIER, 19) %></td>
+          <td><%= gauche(i.DERNIER, 19) %></td><td class="n"><%= i.NOMBRE %></td></tr>
+    <% suivant %>
+    </tbody>
+  </table>
+  <% finsi %>
+</section>
+<% inclure pied %>

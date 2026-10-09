@@ -1,0 +1,12 @@
+<% inclure entete avec titre = titre %>
+<section class="carte etroite">
+  <h1>Connexion</h1>
+  <% si non vide(message) %><p class="alerte"><%= message %></p><% finsi %>
+  <form method="post" action="/CONNEXION">
+    <label>Identifiant <input name="nom" autocomplete="username" required autofocus></label>
+    <label>Mot de passe <input name="mdp" type="password" autocomplete="current-password" required></label>
+    <button>Entrer</button>
+  </form>
+  <p class="aide">Les mots de passe provisoires de <code>admin</code> et <code>demo</code> sont affichés dans la console du serveur au premier lancement.</p>
+</section>
+<% inclure pied %>

@@ -1,0 +1,17 @@
+norme 5 somme (4,6) vrai vrai faux
+rouge  table
+journal X=5 5
+200
+1,3,5,9
+9,5,3,1 [1,2,{"A":true}] 2
+Dupont 33 |Martin 40 |
+total 90 sha ba7816bf
+nb 3 pos 1 Dupont faux
+Dupont Martin 
+trouvé vrai Martin 40 2
+age maj 41
+ajouté Bernard 4
+localisé Durand
+après effacement 3 3
+erreur capturée : division par zéro
+1 bonjour ;2 salut ;

@@ -1,0 +1,35 @@
+<% inclure entete avec titre = titre %>
+<section class="carte">
+  <h1><%= titre %></h1>
+  <table>
+    <thead><tr><th>#</th><th>Article</th><th class="n">Prix</th><th>Stock</th><th></th></tr></thead>
+    <tbody>
+    <% parcourir %>
+      <tr>
+        <td><%= id %></td><td><%= libelle %></td><td class="n"><%= chaine(prix, 1, 2) %> €</td>
+        <td>
+          <form method="post" action="/PRODUITS" class="enligne">
+            <input type="hidden" name="action" value="stock"><input type="hidden" name="id" value="<%= id %>">
+            <input name="stock" type="number" value="<%= stock %>" min="0"><button>OK</button>
+          </form>
+        </td>
+        <td>
+          <form method="post" action="/PRODUITS" class="enligne" onsubmit="return confirm('Supprimer ?')">
+            <input type="hidden" name="action" value="effacer"><input type="hidden" name="id" value="<%= id %>">
+            <button class="danger">Supprimer</button>
+          </form>
+        </td>
+      </tr>
+    <% finparcourir %>
+    </tbody>
+  </table>
+  <h2>Nouveau produit</h2>
+  <form method="post" action="/PRODUITS" class="enligne">
+    <input type="hidden" name="action" value="ajouter">
+    <input name="libelle" placeholder="Libellé" required>
+    <input name="prix" type="number" step="0.01" placeholder="Prix">
+    <input name="stock" type="number" placeholder="Stock">
+    <button>Ajouter</button>
+  </form>
+</section>
+<% inclure pied %>

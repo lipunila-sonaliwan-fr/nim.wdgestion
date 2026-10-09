@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= titre %> · wdGestion V</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="barre">
+  <a class="logo" href="/">wdGestion&nbsp;V</a>
+<% si non estnul(SESSION.UTILISATEUR) %>
+  <nav>
+  <% si "ACCUEIL" $ SESSION.ACCEPTE %>
+    <a href="/ACCUEIL">Catalogue</a>
+  <% finsi %>
+  <% si "PRODUITS" $ SESSION.ACCEPTE %>
+    <a href="/PRODUITS">Produits</a>
+    <a href="/INCIDENTS">Incidents</a>
+  <% finsi %>
+  <% si "EDITION" $ SESSION.VALIDE %>
+    <a href="/EDIT" target="_blank">Éditeur</a>
+  <% finsi %>
+  <% si "SUIVI" $ SESSION.VALIDE %>
+    <a href="/SUIVI" target="_blank">Suivi</a>
+  <% finsi %>
+  </nav>
+  <span class="qui"><%= SESSION.UTILISATEUR %> · <a href="/MOTDEPASSE">mot de passe</a> · <a href="/DECONNEXION">quitter</a></span>
+<% finsi %>
+</header>
+<main>
