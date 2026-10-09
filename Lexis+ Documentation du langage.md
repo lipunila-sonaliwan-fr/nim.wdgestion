@@ -1,8 +1,8 @@
-# Lexis+ — Documentation du langage
+# Lexis+ - Documentation du langage
 
 Oct 9, 2026 · @jihem
 
-> **Lexis+ — Développez naturellement vos applications métier**
+> **Lexis+ - Développez naturellement vos applications métier**
 
 Lexis+ est un langage de programmation en français, héritier de dBase, pour écrire des applications web de gestion : les instructions se lisent comme des phrases (`si`, `pour chaque`, `utiliser`, `envoyer`), les données vivent dans une base SQL DuckDB, les pages HTML se remplissent avec des balises `<% %>`, et les tables façon Lua structurent tout le reste. Ce document l'enseigne pas à pas, puis sert de référence complète.
 
@@ -34,7 +34,7 @@ Lexis+ est un langage de programmation en français, héritier de dBase, pour é
 
 ## 1. Présentation
 
-Lexis+ permet d'écrire une application de gestion complète — écrans, règles métier, données, droits d'accès — avec un seul langage, en français, sans compilation ni outil à installer sur les postes : un navigateur suffit.
+Lexis+ permet d'écrire une application de gestion complète - écrans, règles métier, données, droits d'accès - avec un seul langage, en français, sans compilation ni outil à installer sur les postes : un navigateur suffit.
 
 ### Philosophie
 
@@ -69,7 +69,7 @@ Plusieurs utilisateurs sont servis en parallèle ; les requêtes d'un même util
 
 En sept étapes, on obtient une page qui salue l'utilisateur par son prénom. Tout l'exemple a été exécuté tel quel.
 
-### Étape 1 — Préparer le dossier
+### Étape 1 - Préparer le dossier
 
 Créez un dossier `bonjour` contenant l'exécutable `wdgestionv`, le dossier de la bibliothèque DuckDB de votre système (`linOS`, `macOS` ou `winOS`) et trois sous-dossiers vides :
 
@@ -84,7 +84,7 @@ bonjour/
 
 Les trois dossiers sont obligatoires : sans eux, le serveur refuse de démarrer.
 
-### Étape 2 — Configurer (facultatif)
+### Étape 2 - Configurer (facultatif)
 
 Créez `wdgestionv.json` (même nom que l'exécutable) pour choisir le port et la base :
 
@@ -97,7 +97,7 @@ Créez `wdgestionv.json` (même nom que l'exécutable) pour choisir le port et l
 
 Sans ce fichier, le serveur écoute sur `127.0.0.1:8080` et crée `wdgestionv.duckdb`.
 
-### Étape 3 — Écrire la procédure
+### Étape 3 - Écrire la procédure
 
 Toute application commence par la procédure `CONNEXION` : c'est elle qui accueille un visiteur qui n'est pas encore identifié. Créez `PROG/accueil.prg` :
 
@@ -117,12 +117,12 @@ Ligne à ligne :
 1. `&&` commence un commentaire.
 2. `procedure CONNEXION(prenom)` déclare la procédure ; le paramètre `prenom` reçoit automatiquement le champ `prenom` envoyé par le navigateur (`?prenom=Marie`), ou `nul` s'il est absent.
 3. `locale message = ""` crée une variable propre à cette exécution.
-4. `vide(prenom)` est vrai pour `nul` ou une chaîne blanche ; `non` l'inverse.
+4. `vide(prenom)` est vrai pour `nul` ou une chaîne vide ; `non` l'inverse.
 5. `+` entre chaînes concatène.
 6. `envoyer bienvenue avec message = message` exécute la page `PAGE/bienvenue.html` en lui transmettant la valeur `message`.
 7. `retourner` termine la procédure.
 
-### Étape 4 — Écrire la page
+### Étape 4 - Écrire la page
 
 Créez `PAGE/bienvenue.html` :
 
@@ -146,7 +146,7 @@ Créez `PAGE/bienvenue.html` :
 
 `<% … %>` contient du code Lexis+ ; ici un `si` qui encadre du HTML. `<%= … %>` insère une valeur dans la page, **échappée** (les caractères `< > & "` sont neutralisés).
 
-### Étape 5 — Lancer le serveur
+### Étape 5 - Lancer le serveur
 
 Depuis le dossier `bonjour` :
 
@@ -165,17 +165,17 @@ Sécurité : accès SQL aux fichiers désactivé (acces_fichiers_sql = false)
 Écoute : http://127.0.0.1:8080/
 ```
 
-### Étape 6 — Essayer
+### Étape 6 - Essayer
 
-Ouvrez `http://127.0.0.1:8080/`, tapez « Marie » et validez. La page affiche **Bonjour Marie !**. Essayez maintenant le prénom `<b>x</b>` : la page affiche le texte littéral `<b>x</b>`, sans mise en gras — c'est l'échappement automatique de `<%= %>` qui protège contre l'injection de HTML.
+Ouvrez `http://127.0.0.1:8080/`, tapez "Marie" et validez. La page affiche **Bonjour Marie !**. Essayez maintenant le prénom `<b>x</b>` : la page affiche le texte littéral `<b>x</b>`, sans mise en gras - c'est l'échappement automatique de `<%= %>` qui protège contre l'injection de HTML.
 
-### Étape 7 — Modifier
+### Étape 7 - Modifier
 
 - Une **page** modifiée est recompilée automatiquement à la requête suivante : rechargez simplement le navigateur.
 - Une **procédure** modifiée doit être rechargée : enregistrez-la depuis l'éditeur intégré `/EDIT` (rechargement immédiat) ou redémarrez le serveur (`Ctrl+C` puis `./wdgestionv`).
 - Une erreur de syntaxe dans `PROG` empêche le démarrage et est signalée avec le fichier et la ligne, par exemple `ERREUR : PROG/accueil.prg:4 : 'finsi' manquant pour 'si' (ligne 3)`.
 
-Cette application n'a pas d'identification : tant que la session reste « anonyme », toute adresse aboutit à `CONNEXION`. Le chapitre 14 montre comment ouvrir l'accès à d'autres procédures après connexion.
+Cette application n'a pas d'identification : tant que la session reste "anonyme", toute adresse aboutit à `CONNEXION`. Le chapitre 14 montre comment ouvrir l'accès à d'autres procédures après connexion.
 
 ## 3. Bases du langage
 
@@ -246,7 +246,7 @@ Comme en Lua, **seuls `nul` et `faux` sont faux**. Le nombre `0` et la chaîne v
 ? sisinon("", "vrai", "faux")    && → vrai
 ```
 
-Pour tester une valeur « vide » au sens métier, utilisez `vide(v)` : vrai pour `nul`, `faux`, `0`, une chaîne blanche ou une table sans élément.
+Pour tester une valeur "vide" au sens métier, utilisez `vide(v)` : vrai pour `nul`, `faux`, `0`, une chaîne vide ou une table sans élément.
 
 ### 3.5 Conversions automatiques
 
@@ -388,7 +388,7 @@ Une division ou un modulo par zéro déclenche l'erreur `division par zéro`.
 | `..` | concaténation (convertit les nombres ; `nul` devient vide) | `"n°" .. 5` | `"n°5"` |
 | `+` | concaténation façon dBase | `"a" + "b"` | `"ab"` |
 | `#` | longueur en caractères (UTF-8) | `#"été"` | `3` |
-| `$` | « est contenu dans » | `"lu" $ "lundi"` | `vrai` |
+| `$` | "est contenu dans" | `"lu" $ "lundi"` | `vrai` |
 
 ### 5.3 Comparaisons
 
@@ -455,7 +455,7 @@ si note >= 16
   ? "Très bien"
 sinonsi note >= 12
   ? "Bien"                 && → affiché
-sinon si note >= 10        && « sinon si » en deux mots est accepté
+sinon si note >= 10        && "sinon si" en deux mots est accepté
   ? "Passable"
 sinon
   ? "Insuffisant"
@@ -576,7 +576,7 @@ finessayer
 
 - `erreur "texte"` déclenche une erreur avec votre message.
 - `capturer nom` reçoit le message dans une variable locale ; le nom est facultatif.
-- Une erreur non capturée arrête la requête : l'utilisateur reçoit une page « 500 Erreur d'exécution », avec le détail (fichier, ligne, message) seulement s'il a le droit `EDITION`. La console du serveur journalise toujours le détail.
+- Une erreur non capturée arrête la requête : l'utilisateur reçoit une page "500 Erreur d'exécution", avec le détail (fichier, ligne, message) seulement s'il a le droit `EDITION`. La console du serveur journalise toujours le détail.
 - Le dépassement de la limite d'instructions ou de durée (boucle infinie) ne peut pas être capturé : il arrête toujours la requête.
 
 ### 6.8 Garde-fous
@@ -701,7 +701,7 @@ inserer "abricot" dans fruits position 1     && ajout en tête, le reste se déc
 ? joindre(fruits, ", ")      && → abricot, pomme, poire, kiwi, banane
 
 locale enleve
-retirer de fruits position 2 dans enleve     && retire « pomme » et le garde
+retirer de fruits position 2 dans enleve     && retire "pomme" et le garde
 ? enleve, joindre(fruits, ", ")              && → pomme abricot, poire, kiwi, banane
 
 retirer de fruits                            && retire le dernier
@@ -841,16 +841,16 @@ retourner
 ```
 
 1. `panier:procedure PANIER_AJOUTER comme ajouter` range la procédure dans la clef `AJOUTER` de la table (sans `comme`, la clef porte le nom de la procédure).
-2. `panier:ajouter(12.5)` — avec **deux-points** — appelle la procédure en lui passant **la table elle-même en premier argument**, puis les autres.
+2. `panier:ajouter(12.5)` - avec **deux-points** - appelle la procédure en lui passant **la table elle-même en premier argument**, puis les autres.
 3. Par convention, ce premier paramètre s'appelle `soi` (le `self` de Lua).
 
-`panier.ajouter(x)` — avec un **point** — appelle la même procédure sans lui passer la table : utile pour une fonction rangée dans une table qui n'a pas besoin d'elle.
+`panier.ajouter(x)` - avec un **point** - appelle la même procédure sans lui passer la table : utile pour une fonction rangée dans une table qui n'a pas besoin d'elle.
 
 ### 9.2 Une classe, pas à pas : le compte bancaire
 
-Une « classe » est une table qui contient les méthodes et sert de métatable à ses objets ; sa clef `__index` dit où chercher ce qu'un objet ne possède pas lui-même.
+Une "classe" est une table qui contient les méthodes et sert de métatable à ses objets ; sa clef `__index` dit où chercher ce qu'un objet ne possède pas lui-même.
 
-**Étape 1 — la classe.**
+**Étape 1 - la classe.**
 
 ```
 procedure DEFINIR_COMPTE
@@ -863,7 +863,7 @@ procedure DEFINIR_COMPTE
 retourner
 ```
 
-**Étape 2 — le constructeur.**
+**Étape 2 - le constructeur.**
 
 ```
 fonction NOUVEAU_COMPTE(titulaire, solde)
@@ -872,7 +872,7 @@ fonction NOUVEAU_COMPTE(titulaire, solde)
 retourner c
 ```
 
-**Étape 3 — les méthodes.**
+**Étape 3 - les méthodes.**
 
 ```
 procedure COMPTE_DEPOSER(soi, montant)
@@ -893,7 +893,7 @@ fonction COMPTE_TEXTE(soi)
 retourner "[Compte " + soi:resume() + "]"
 ```
 
-**Étape 4 — l'utilisation.**
+**Étape 4 - l'utilisation.**
 
 ```
 faire DEFINIR_COMPTE
@@ -991,7 +991,7 @@ reglages.theme = "sombre"
 
 ### 9.6 Contrôler les affectations : \_\_newindex
 
-`__newindex` est appelé quand on affecte une clef **absente** de la table. Une fois la clef créée, les affectations suivantes ne passent plus par lui. Pour contrôler toutes les affectations, on garde la table vide et on range les données ailleurs (table « mandataire ») :
+`__newindex` est appelé quand on affecte une clef **absente** de la table. Une fois la clef créée, les affectations suivantes ne passent plus par lui. Pour contrôler toutes les affectations, on garde la table vide et on range les données ailleurs (table "mandataire") :
 
 ```
 fonction FICHE_CONTROLEE
@@ -1035,7 +1035,7 @@ retourner ht * soi.taux / 100
 | Clef de la métatable | Déclenchée par | Reçoit | Renvoie |
 | --- | --- | --- | --- |
 | `__index` | lecture d'une clef absente | table ou procédure `(t, clef)` | la valeur |
-| `__newindex` | affectation d'une clef absente | table ou procédure `(t, clef, valeur)` | — |
+| `__newindex` | affectation d'une clef absente | table ou procédure `(t, clef, valeur)` | - |
 | `__call` | `t(…)` | `(t, args…)` | le résultat |
 | `__tostring` | `?`, `<%= %>`, `chaine()`, `texte()`, `joindre()` | `(t)` | une chaîne |
 | `__len` | `#t` | `(t)` | un nombre |
@@ -1397,7 +1397,7 @@ La page `PAGE/liste.html` :
 <% inclure pied %>
 ```
 
-Avec deux produits en base, « Stylo \<rouge> » et « Agrafeuse », le HTML produit est :
+Avec deux produits en base, "Stylo \<rouge>" et "Agrafeuse", le HTML produit est :
 
 ```html
 <header>CATALOGUE</header>
@@ -1616,7 +1616,7 @@ Une session anonyme ne peut exécuter que `CONNEXION` ; elle devient active quan
 
 ### 14.2 Une connexion complète, pas à pas
 
-**Étape 1 — la table des comptes**, créée au démarrage :
+**Étape 1 - la table des comptes**, créée au démarrage :
 
 ```
 procedure DEMARRAGE
@@ -1638,7 +1638,7 @@ retourner
 
 `mdpaleatoire(16)` tire un mot de passe de 16 caractères ; `?` l'affiche dans la console du serveur, une seule fois. Aucun mot de passe par défaut n'est ainsi livré.
 
-**Étape 2 — la procédure CONNEXION :**
+**Étape 2 - la procédure CONNEXION :**
 
 ```
 procedure CONNEXION(nom, mdp)
@@ -1664,7 +1664,7 @@ retourner
 - `verifiermdp(mdp, empreinte)` compare le mot de passe à l'empreinte stockée. Si l'utilisateur n'existe pas, `empreinte` vaut `nul` et la fonction calcule quand même une empreinte complète : le temps de réponse ne révèle pas si l'identifiant existe.
 - Le message d'erreur ne dit pas lequel des deux était faux.
 
-**Étape 3 — la page `PAGE/connexion.html` :**
+**Étape 3 - la page `PAGE/connexion.html` :**
 
 ```html
 <% inclure entete avec titre = "Connexion" %>
@@ -1677,7 +1677,7 @@ retourner
 <% inclure pied %>
 ```
 
-**Étape 4 — la déconnexion :**
+**Étape 4 - la déconnexion :**
 
 ```
 procedure DECONNEXION
@@ -1754,7 +1754,7 @@ Toute tentative d'ouvrir une autre page avant le changement est alors refusée (
 
 ## 15. Tutoriel complet : gestion des contacts
 
-Ce tutoriel construit un carnet de contacts partagé — liste, recherche, création, modification avec contrôle de saisie, suppression, export JSON — en un fichier de procédures, cinq pages et une feuille de style. Le code ci-dessous a été exécuté et testé tel quel.
+Ce tutoriel construit un carnet de contacts partagé - liste, recherche, création, modification avec contrôle de saisie, suppression, export JSON - en un fichier de procédures, cinq pages et une feuille de style. Le code ci-dessous a été exécuté et testé tel quel.
 
 ### 15.1 Ce que l'on va construire
 
@@ -1780,7 +1780,7 @@ contacts/
 └── BLOB/style.css
 ```
 
-### 15.2 Étape 1 — La table
+### 15.2 Étape 1 - La table
 
 Début de `PROG/contacts.prg` :
 
@@ -1801,7 +1801,7 @@ retourner
 
 La séquence `seq_contacts` numérote automatiquement les contacts. `if not exists` rend la procédure sans effet aux lancements suivants.
 
-### 15.3 Étape 2 — La connexion
+### 15.3 Étape 2 - La connexion
 
 Pour garder le tutoriel court, un prénom suffit ; le chapitre 14 montre une vraie connexion par mot de passe.
 
@@ -1831,7 +1831,7 @@ retourner
 <% inclure pied %>
 ```
 
-### 15.4 Étape 3 — Le gabarit
+### 15.4 Étape 3 - Le gabarit
 
 `PAGE/entete.html` :
 
@@ -1875,7 +1875,7 @@ label { display: block; margin: .5rem 0; }
 .erreurs { color: #b42318; }
 ```
 
-### 15.5 Étape 4 — La liste et la recherche
+### 15.5 Étape 4 - La liste et la recherche
 
 ```
 procedure CONTACTS(q)
@@ -1905,7 +1905,7 @@ retourner
   <a href="/FICHE">Nouveau contact</a>
 </form>
 <% si #liste = 0 %>
-  <p>Aucun contact<% si non vide(q) %> pour « <%= q %> »<% finsi %>.</p>
+  <p>Aucun contact<% si non vide(q) %> pour "<%= q %>" <% finsi %>.</p>
 <% sinon %>
 <table>
   <tr><th>Nom</th><th>Société</th><th>Courriel</th><th>Téléphone</th><th></th></tr>
@@ -1930,7 +1930,7 @@ retourner
 
 La suppression passe par un petit formulaire POST : un lien ne doit jamais modifier de données.
 
-### 15.6 Étape 5 — La fiche (création et modification)
+### 15.6 Étape 5 - La fiche (création et modification)
 
 ```
 procedure FICHE(id)
@@ -1973,7 +1973,7 @@ Sans `id`, la fiche est vide (création) ; avec un `id` inconnu, retour à la li
 
 La même page sert à la création, à la modification et au réaffichage après une erreur de saisie. `(c.prenom ou "")` remplace un prénom absent par une chaîne vide.
 
-### 15.7 Étape 6 — Contrôler et enregistrer
+### 15.7 Étape 6 - Contrôler et enregistrer
 
 ```
 fonction VERIFIER(c)
@@ -2017,7 +2017,7 @@ Le déroulement :
 4. En cas d'erreur, la fiche est réaffichée avec les valeurs saisies et la liste des erreurs.
 5. Sinon, `insert` ou `update` selon la présence d'un `id`, puis redirection vers la liste (Post/Redirect/Get).
 
-### 15.8 Étape 7 — Supprimer, exporter, quitter
+### 15.8 Étape 7 - Supprimer, exporter, quitter
 
 ```
 procedure SUPPRIMER(id)
@@ -2038,17 +2038,17 @@ procedure DECONNEXION
 retourner
 ```
 
-### 15.9 Étape 8 — Essayer
+### 15.9 Étape 8 - Essayer
 
 Lancez `./wdgestionv` dans le dossier `contacts`, ouvrez `http://127.0.0.1:8080/` et vérifiez :
 
 | Action | Résultat attendu (constaté) |
 | --- | --- |
-| Première visite, après connexion | « Aucun contact. » |
-| Enregistrer un nom vide et le courriel « pasunmail » | « Le nom est obligatoire. » et « Le courriel est invalide. » |
+| Première visite, après connexion | "Aucun contact." |
+| Enregistrer un nom vide et le courriel "pasunmail" | "Le nom est obligatoire. " et "Le courriel est invalide." |
 | Créer Durand (Acme), Martin (Globex), O'Brien (Acme) | 3 contact(s) |
 | Prénom saisi : `<script>` | affiché `<script>` en texte, jamais exécuté |
-| Rechercher « acme » | 2 contact(s) |
+| Rechercher "acme" | 2 contact(s) |
 | Modifier la société de Martin en Initech | la liste affiche Initech |
 | Ouvrir `/SUPPRIMER?id=2` dans la barre d'adresse | rien n'est supprimé (GET refusé) |
 | Ouvrir `/EXPORT` | `[{"ID":2,"NOM":"Martin","PRENOM":"Léa","SOCIETE":"Initech",…}, …]` |
@@ -2167,7 +2167,7 @@ Toutes les fonctions intégrées, par famille ; chaque résultat indiqué a ét�
 | --- | --- | --- | --- |
 | `type(v)` | `"nul"`, `"logique"`, `"nombre"`, `"chaine"`, `"table"`, `"procedure"` | `type({})` | `table` |
 | `estnul(v)` | v vaut `nul` | `estnul(0)` | `faux` |
-| `vide(v)` | `nul`, `faux`, `0`, chaîne blanche, table sans élément (`EMPTY`) | `vide("  ")` | `vrai` |
+| `vide(v)` | `nul`, `faux`, `0`, chaîne vide, table sans élément (`EMPTY`) | `vide("  ")` | `vrai` |
 | `sisinon(c, a, b)` | `a` si `c` est vrai, sinon `b` ; seule la branche choisie est calculée (`IIF`) | `sisinon(1 > 2, "oui", "non")` | `non` |
 
 ### 17.4 Dates et heures
@@ -2238,7 +2238,7 @@ Les dates sont des chaînes ISO ; les calculs de dates se font en SQL : `valeurs
 Une erreur pendant une requête ne fait jamais tomber le serveur : la requête échoue, le fil d'exécution continue, et :
 
 1. le **journal** (la console du serveur) affiche une ligne `500 <ip> <procédure> - <fichier>:<ligne> : <message>` ;
-2. le **navigateur** reçoit une page « Erreur d'exécution ». Le détail (fichier, ligne, message) n'y apparaît que pour les sessions qui ont `EDITION` dans `VALIDE`, ou si `"details_erreurs": true` est mis dans le fichier de configuration — jamais pour un visiteur ordinaire ;
+2. le **navigateur** reçoit une page "Erreur d'exécution". Le détail (fichier, ligne, message) n'y apparaît que pour les sessions qui ont `EDITION` dans `VALIDE`, ou si `"details_erreurs": true` est mis dans le fichier de configuration - jamais pour un visiteur ordinaire ;
 3. une transaction laissée ouverte par la procédure est **annulée automatiquement**.
 
 Pas à pas, pour trouver une erreur : connectez-vous avec un compte `EDITION`, reproduisez l'action, lisez le fichier et la ligne affichés, ouvrez-les dans `/EDIT`, corrigez, enregistrez, recommencez. Pas besoin de redémarrer : l'enregistrement d'un programme dans `/EDIT` recharge `PROG` (et signale ses erreurs de syntaxe), et une page modifiée est relue automatiquement.
@@ -2253,7 +2253,7 @@ Pas à pas, pour trouver une erreur : connectez-vous avec un compte `EDITION`, r
 | `'a' (ou 'jusqua') attendu dans 'pour'` | `pour i = 1 10` | `pour i = 1 a 10` |
 | `',' ou '}' attendu dans la table au lieu de …` | virgule oubliée dans `{…}` | `{a = 1, b = 2}` |
 | `expression attendue au lieu de …` | opérateur sans opérande, parenthèse en trop | relire l'expression de la ligne |
-| `caractère inattendu : '…'` | caractère non reconnu (guillemet typographique `« »` ou `’` copié d'un traitement de texte) | utiliser `"` ou `'` droits |
+| `caractère inattendu : '…'` | caractère non reconnu (guillemet typographique `" "` ou `’` copié d'un traitement de texte) | utiliser `"` ou `'` droits |
 | `balise <% non terminée` | page : `<%` sans `%>` | fermer la balise |
 | `instruction inconnue ou incomplète` | faute de frappe dans un mot-clé | voir la liste des mots réservés en annexe |
 
@@ -2281,7 +2281,7 @@ Pas à pas, pour trouver une erreur : connectez-vous avec un compte `EDITION`, r
 | Code | Signification | Que faire |
 | --- | --- | --- |
 | 403 | procédure demandée absente de `ACCEPTE` : la session est **supprimée** et l'IP notée dans les incidents | ajouter la procédure à `ACCEPTE` au bon moment (connexion, étape suivante) |
-| 403 « en-tête X-WDG manquant » | appel `fetch` sans l'en-tête anti-falsification | ajouter `headers: {'X-WDG': '1'}` |
+| 403 "en-tête X-WDG manquant" | appel `fetch` sans l'en-tête anti-falsification | ajouter `headers: {'X-WDG': '1'}` |
 | 404 | fichier statique absent de `BLOB` | vérifier le chemin |
 | 429 | trop de requêtes en attente pour une même session, ou trop d'essais de connexion | attendre ; éviter les doubles clics qui renvoient le formulaire |
 | 500 | erreur d'exécution | voir 18.1 |
@@ -2291,7 +2291,7 @@ Pas à pas, pour trouver une erreur : connectez-vous avec un compte `EDITION`, r
 
 1. **Variable globale involontaire.** Une variable non déclarée devient une globale de la session et survit d'une requête à l'autre. Déclarez toujours avec `locale`.
 2. **Clefs en majuscules.** `t.nom` et `t.NOM` désignent la même clef ; mais `t["nom"]` est une clef exacte, différente. Les lignes de `requete` et `dejson` ont des clefs en majuscules.
-3. **`0` est vrai.** Seuls `nul` et `faux` sont faux dans un `si`. Pour tester « vide », utilisez `vide(x)`.
+3. **`0` est vrai.** Seuls `nul` et `faux` sont faux dans un `si`. Pour tester "vide", utilisez `vide(x)`.
 4. **Oublier `ACCEPTE`.** Après une connexion réussie, la nouvelle liste d'actions autorisées doit être écrite dans `ACCEPTE`, sinon le premier clic renvoie 403 et ferme la session.
 5. **Concaténer une table.** `__tostring` ne suffit pas pour `..` : ajoutez `__concat` ou appelez `texte(t)`.
 6. **Échapper l'affichage.** `<%= %>` échappe le HTML ; n'insérez du HTML brut que s'il vient de vous, jamais d'une saisie.
@@ -2364,7 +2364,7 @@ Ces mots ont un sens pour Lexis+ et ne peuvent pas servir de nom de variable :
 
 ### 19.5 Mentions légales
 
-**Lexis+** — *Développez naturellement vos applications métier*
+**Lexis+** - *Développez naturellement vos applications métier*
 
 © 2026 Jean‑Marc QUÉRÉ, sonaliwan.fr
 SIRET : 130333198000013
