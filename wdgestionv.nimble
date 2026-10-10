@@ -1,6 +1,6 @@
 # Package
 
-version       = "1.0.0"
+version       = "5.0.8"
 author        = "Jean-Marc \"jihem\" QUERE"
 description   = "Serveur web à interpréteur wdGestion V (français) sur DuckDB"
 license       = "CC BY-NC-SA 4.0"
