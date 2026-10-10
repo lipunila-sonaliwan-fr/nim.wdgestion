@@ -2362,17 +2362,17 @@ Ces mots ont un sens pour Lexis+ et ne peuvent pas servir de nom de variable :
 - **VALIDE** : variable de session, liste des droits (`CONNEXION`, `EDITION`, `SUIVI`…).
 - **Zone** : table SQL ouverte par `utiliser`, avec un enregistrement courant, à la manière d'un fichier dBase.
 
-### 19.5 Mentions légales
+## 19.5 Mentions légales
 
 **Lexis+** - *Développez naturellement vos applications métier*
 
-© 2026 Jean‑Marc QUÉRÉ, sonaliwan.fr
-SIRET : 130333198000013
-
+© 2026 Jean‑Marc QUÉRÉ, sonaliwan.fr<br/>
+SIRET : 130333198000013<br/>
+<br/>
 Distribué sous licence CC BY‑NC‑SA 4.0
-
-Les utilisations commerciales ne sont pas couvertes par cette licence.
-Pour obtenir une autorisation d'utilisation commerciale,
-contactez l'auteur.
-
-Contact : metalab (at) sonaliwan.fr
+<br/>
+Les utilisations commerciales ne sont pas couvertes par cette licence.<br/>
+Pour obtenir une autorisation d'utilisation commerciale,<br/>
+contactez l'auteur.<br/>
+<br/>
+Contact : metalab (at) sonaliwan.fr<br/>
