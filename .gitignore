@@ -4,3 +4,6 @@ wdgestionv.duckdb
 winOS/duckdb.exe
 linOS/duckdb
 wdgestionv
+tests/t_langage
+tests/t_crypto
+tests/t_fuites_parseur
