@@ -1,6 +1,6 @@
 # Lexis+ - Documentation du langage
 
-Oct 9, 2026 · @jihem
+[![](wdgestion.png)]()
 
 > **Lexis+ - Développez naturellement vos applications métier**
 
