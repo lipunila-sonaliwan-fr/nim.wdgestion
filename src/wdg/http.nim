@@ -10,6 +10,8 @@
 import std/[net, nativesockets, strutils, tables, locks, atomics, times, selectors, monotimes]
 when defined(posix):
   import std/posix
+elif defined(windows):
+  import std/winlean
 
 type
   RequeteHttp* = object
@@ -290,14 +292,20 @@ proc veille() {.thread.} =
           var (ok, fd) = fileVeille.tryRecv()
           while ok:
             try:
-              sel.registerHandle(fd, {Event.Read}, fd)
+              when defined(windows):
+                # select() de Windows : 64 descripteurs au plus (FD_SETSIZE)
+                if echeances.len >= 60:
+                  fermerConn(fd)
+                  (ok, fd) = fileVeille.tryRecv()
+                  continue
+              sel.registerHandle(SocketHandle(fd), {Event.Read}, fd)
               echeances[fd] = getMonoTime() + initDuration(milliseconds = config.delaiInactivite)
             except CatchableError:
               fermerConn(fd)
             (ok, fd) = fileVeille.tryRecv()
         else:
-          let fd = sel.getData(ev.fd)
-          sel.unregister(ev.fd)
+          let fd = sel.getData(SocketHandle(ev.fd))
+          sel.unregister(SocketHandle(ev.fd))
           echeances.del(fd)
           if Event.Error in ev.events: fermerConn(fd)
           else: fileConnexions.send(Connexion(fd: SocketHandle(fd)))
@@ -308,7 +316,7 @@ proc veille() {.thread.} =
         for fd, e in echeances:
           if t > e: mortes.add fd
         for fd in mortes:
-          sel.unregister(fd)
+          sel.unregister(SocketHandle(fd))
           echeances.del(fd)
           fermerConn(fd)
     for fd in echeances.keys: fermerConn(fd)

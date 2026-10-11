@@ -2,6 +2,9 @@
 # wdGestion V/FR - serveur web à interpréteur wdGestion V
 # Tables SQL DuckDB, table façon Lua, pages à balises <% %> et langage Lexis+ (en français !).
 #
+# Windows (méthode de compilation aternative)
+# nim c -d:release --app:gui -d:useMalloc -d:windows --mm:atomicArc --threads:on --passC=" -I C:\...\wdgestionv\src" -o:wdgestion.exe src\wdgestionv.nim
+#
 # Utilise la bibliothèque sonaliwan/duckdb (duQuack) de Jean-Marc "jihem" Quéré. [ → Quelqu'un d'appréciable 😀 et en plus il était d'accord...🤣 ]
 
 import std/[os, strutils, atomics]

@@ -1,7 +1,7 @@
 Lexis+ &
 wdGestion V/FR - serveur web intégrant l'interpréteur Lexis+ sur DuckDB<br/>
 © 2026 Jean‑Marc "jihem"Quéré, sonaliwan.fr<br/>
-SIRET 130333198000013<br/>
+SIRET 13033319800013<br/>
 Distribué sous licence CC BY‑NC‑SA 4.0.<br/>
 
 Les utilisations commerciales ne sont pas couvertes par cette licence.<br/>

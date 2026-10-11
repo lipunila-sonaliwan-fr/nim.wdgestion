@@ -6,7 +6,7 @@ Oct 9, 2026 · @jihem
 
 Lexis+ est un langage de programmation en français, héritier de dBase, pour écrire des applications web de gestion : les instructions se lisent comme des phrases (`si`, `pour chaque`, `utiliser`, `envoyer`), les données vivent dans une base SQL DuckDB, les pages HTML se remplissent avec des balises `<% %>`, et les tables façon Lua structurent tout le reste. Ce document l'enseigne pas à pas, puis sert de référence complète.
 
-**Tous droits réservés 2026 - Jean-Marc QUÉRÉ, sonaliwan.fr** SIRET : 130333198000013 · Contact : metalab (at) sonaliwan.fr
+**Tous droits réservés 2026 - Jean-Marc QUÉRÉ, sonaliwan.fr** SIRET : 13033319800013 · Contact : metalab (at) sonaliwan.fr
 
 ## Sommaire
 
@@ -2367,7 +2367,7 @@ Ces mots ont un sens pour Lexis+ et ne peuvent pas servir de nom de variable :
 **Lexis+** - *Développez naturellement vos applications métier*
 
 © 2026 Jean‑Marc QUÉRÉ, sonaliwan.fr<br/>
-SIRET : 130333198000013<br/>
+SIRET : 13033319800013<br/>
 <br/>
 Distribué sous licence CC BY‑NC‑SA 4.0
 <br/>
